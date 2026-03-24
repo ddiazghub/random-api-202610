@@ -8,14 +8,16 @@
 	"main": "index.js",
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1",
-		"start": "node index.js",
+		"start": "pm2 start index.js --name my-app",
+		"kill": "pm2 delete my-app",
 		"dev": "nodemon index.js",
 		"lint": "biome lint",
 		"format": "biome format --fix"
 	},
 	"dependencies": {
 		"@faker-js/faker": "^10.4.0",
-		"express": "^5.2.1"
+		"express": "^5.2.1",
+		"pm2": "^6.0.14"
 	},
 	"devDependencies": {
 		"@biomejs/biome": "2.4.8",
