@@ -14,6 +14,10 @@ app.get("/random/int", (req, res) => {
 	res.status(200).send(crypto.randomInt(1000000));
 });
 
+app.get("/random/negative", (req, res) => {
+	res.status(200).send(-crypto.randomInt(1000000));
+});
+
 app.get("/random/float", (req, res) => {
 	res.status(200).send(Math.random());
 });
