@@ -3,6 +3,7 @@ const express = require("express");
 const { faker } = require("@faker-js/faker");
 
 const app = express();
+const PORT = process.env.PORT ?? 3000;
 
 app.use(express.json());
 
@@ -12,6 +13,10 @@ app.get("/", (re, res) => {
 
 app.get("/random/int", (req, res) => {
   res.status(200).send(crypto.randomInt(1000000));
+});
+
+app.get("/random/float", (req, res) => {
+  res.status(200).send(Math.random());
 });
 
 app.get("/random/person", (req, res) => {
@@ -24,4 +29,4 @@ app.get("/random/person", (req, res) => {
   res.status(200).send(person);
 });
 
-app.listen(3000, () => console.log("Server running on port: ", 3000));
+app.listen(PORT, () => console.log("Server running on port: ", PORT));
