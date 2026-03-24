@@ -1,0 +1,66 @@
+name: Deploy
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24
+
+      - name: Install dependencies
+        run: |
+          npm ci
+
+      - name: Check formatting
+        run: |
+          npx biome format
+
+      - name: Lint
+        run: |
+          npm run lint
+
+      - name: Deploy to EC2
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.EC2_PRIVATE_KEY }}
+          # Los siguientes se ejecutan en la instancia EC2
+          script: |
+            cd ~
+
+            ########################################
+            #             UBUNTU/DEBIAN            #
+            ########################################
+            # sudo apt update
+            # sudo apt install --upgrade git nodejs npm -y
+
+            ########################################
+            #          AMAZON LINUX/FEDORA         #
+            ########################################
+            sudo dnf makecache --refresh
+            sudo dnf install git nodejs npm -y
+
+            # Se clona el repo si no existe, de otro modo, se hace un pull
+            if [ ! -d "my-app" ]; then
+              git clone "https://github.com/${{ github.repository }}" my-app
+            else
+              cd my-app
+              git pull
+            fi
+
+            cd ~/my-app
+            npm ci
+            npm run build || true
+            npm run kill
+            npm start &

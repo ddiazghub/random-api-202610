@@ -8,11 +8,11 @@ const PORT = process.env.PORT ?? 3000;
 app.use(express.json());
 
 app.get("/", (re, res) => {
-  res.status(200).send("Hello World!!!");
+	res.status(200).send("Hello World!!!");
 });
 
 app.get("/random/int", (req, res) => {
-  res.status(200).send(crypto.randomInt(1000000));
+	res.status(200).send(crypto.randomInt(1000000));
 });
 
 app.get("/random/float", (req, res) => {
@@ -20,13 +20,13 @@ app.get("/random/float", (req, res) => {
 });
 
 app.get("/random/person", (req, res) => {
-  const person = {
-    firstName: faker.person.firstName(),
-    lastName: faker.person.lastName(),
-    dateOfBirth: faker.date.birthdate(),
-  };
+	const person = {
+		firstName: faker.person.firstName(),
+		lastName: faker.person.lastName(),
+		dateOfBirth: faker.date.birthdate(),
+	};
 
-  res.status(200).send(person);
+	res.status(200).send(person);
 });
 
 app.listen(PORT, () => console.log("Server running on port: ", PORT));
